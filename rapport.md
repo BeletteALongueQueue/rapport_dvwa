@@ -299,3 +299,74 @@ $octet = explode( ".", $target );
 if( ( is_numeric( $octet[0] ) ) && ( is_numeric( $octet[1] ) ) && ( is_numeric( $octet[2] ) ) && ( is_numeric( $octet[3] ) ) && ( sizeof( $octet ) == 4 ) )
 ```
 Ce dernier va diviser l'IP en 4 parties grâce au séparateur `.` puis chaque octet est validé avec la fonction `is_numeric()` permettant de vérifier si il s'agit bien de chiffres. Finalement le script vérifie aussi la taille avec `size($octet) == 4` pour confirmer que l'adresse comporte exactement 4 partie.
+
+# 3. SQL Injection
+
+Une injection SQL (SQL Injection) est une faille de sécurité exploitée par un attaquant pour exécuter des commandes SQL malveillantes sur une base de données. Elle se produit lorsque des entrées utilisateur ne sont pas correctement validées ou filtrées avant d’être intégrées à une requête SQL. Cela peut permettre à un attaquant de manipuler les requêtes SQL de l'application, exposant ainsi des données sensibles ou compromettant le système
+
+Imaginons un bloc de code vulnérable tout simple :  
+```
+$username = $_POST['username'];
+$password = $_POST['password'];
+
+$query = "SELECT * FROM users WHERE username = '$username' AND password = '$password';";
+$result = mysqli_query($conn, $query);
+```
+Le script ci-dessus va utiliser l'input de l'utilisateur et va le concaténer avec le reste de la commande SQL. Cependant il n'y a aucun filtre.  
+
+Ainsi prenons un exemple d'attaque où l'attaquant entre comme nom d'utilisateur `admin' --`  
+La requête devient alors :
+```
+SELECT * FROM users WHERE username = 'admin' -- ' AND password = '';
+```
+La partie `-- ' AND password = '';` est commenté et la commande restante n'est donc plus que `SELECT * FROM users WHERE username = 'admin'`. Cela accordera donc l'accès à l'utilisateur.
+
+## 3.1 Premier niveau - low
+
+On a une page avec la possibilié d'entrer un id d'utilisateur
+![images](/images/sql/1.png)  
+Cela nous renvoie l'utilisateur sans le mot de passe.  
+
+On va commencer par essayer une simple injection 
+```
+admin' OR '1'='1
+```
+C'est quasiment le même exemple que cité auparavant sauf que l'on rajoute une condition `OR '1'='1` qui est bien sur toujours vrai. Ainsi on va tout afficher puisque la condition est toujours vrai.
+
+![images](/images/sql/2.png)  
+
+# 4. Brute Force
+
+Inutile d'expliquer le bruteforce, mais nous allons quand même le faire :).
+Le bruteforce  est une méthode d'attaque utilisée pour deviner un mot de passe, une clé de chiffrement ou toute autre information sensible en essayant systématiquement toutes les combinaisons possibles jusqu'à trouver la bonne. C'est une méthode simple mais parfois efficace, surtout si les mots de passe ou clés sont faibles ou mal sécurisés.
+
+Il y a plusieurs outils disponible pour bruteforce : 
+| **Outil**         | **Description**                                                                 | **Cible principale**                   | **Site officiel/GitHub**                            |
+|--------------------|---------------------------------------------------------------------------------|-----------------------------------------|-----------------------------------------------------|
+| **Hydra**          | Outil rapide pour tester des mots de passe sur divers services réseau.         | SSH, FTP, HTTP, SMTP, etc.             | [GitHub](https://github.com/vanhauser-thc/thc-hydra)|
+| **Medusa**         | Outil de bruteforce modulaire et rapide pour les services réseau.              | SSH, FTP, Telnet, MySQL, etc.          | [GitHub](https://github.com/jmk-foofus/medusa)      |
+| **John the Ripper**| Craqueur de mots de passe hachés puissant et configurable.                     | Hachages de mots de passe              | [Site officiel](https://www.openwall.com/john/)     |
+| **Hashcat**        | Outil de déchiffrement avancé pour hachages, avec support GPU.                 | Hachages de mots de passe              | [GitHub](https://github.com/hashcat/hashcat)        |
+| **Burp Suite**     | Suite d'outils pour les tests de sécurité, incluant un module de bruteforce.   | Formulaires web, sessions HTTP         | [Site officiel](https://portswigger.net/burp)       |
+| **Wfuzz**          | Outil flexible pour le bruteforce des paramètres web.                         | URL, cookies, paramètres web           | [GitHub](https://github.com/xmendez/wfuzz)          |
+| **Patator**        | Outil modulaire pour tester les mots de passe et autres services.              | SSH, HTTP, DNS, MySQL, etc.            | [GitHub](https://github.com/lanjelot/patator)       |
+| **Ncrack**         | Outil rapide pour tester la sécurité des authentifications réseau.             | SSH, RDP, FTP, Telnet, etc.            | [GitHub](https://github.com/nmap/ncrack)           |
+| **Aircrack-ng**    | Outil pour le craquage des clés de réseaux Wi-Fi.                              | Clés WEP/WPA sur Wi-Fi                 | [Site officiel](https://www.aircrack-ng.org/)       |
+| **CeWL**           | Génère des listes de mots (wordlists) basées sur les contenus d'un site.       | Création de dictionnaires personnalisés | [GitHub](https://github.com/digininja/CeWL)         |
+
+## 4.1 Premier niveau - low
+
+On arrive sur une simple page de login
+![images](/images/bruteforce/1.png)
+
+On remarque en essayant des identifiants que ces derniers sont envoyés via la méthode `GET` car on a cette url.
+```
+http://dvwa.lan/DVWA/vulnerabilities/brute/?username=admin&password=admin&Login=Login#
+```
+
+On va utiliser `hydra` pour essayer de bruteforce.  
+La commande n'etant pas très lisible en screenshot, la voici directement :
+
+```
+hydra -l admin -P /opt/wordlists/wordlists/passwords/most_used_passwords.txt dvwa.lan http-get-form "/dvwa/vulnerabilities/brute/index.php:username=^USER^&password=^PASS^&Login=Login:Username and/or password incorrect.:H=Cookie: security=low; PHPSESSID=po9is02drb8ohe96pq1j61flmu"
+```
