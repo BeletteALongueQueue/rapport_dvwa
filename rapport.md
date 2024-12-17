@@ -732,3 +732,68 @@ http://34.163.97.167/DVWA/hackable/uploads/test.php
 
 Notre shell est bien present nous permettant de saisir des commandes 
 ![images](/images/fileUpload/2.png)
+
+# 6.2 Deuxieme niveau - medium
+
+Pour le deuxieme challenge, en essayant d'uploader un fichier php sur le site on est bloque puisque le site n'accepte que des `JPEG` et `PNG`
+
+![images](/images/fileUpload/3.png)
+
+On va donc etre obliger d'utiliser Burp Suite, Tout d'abord nous allons uploader un fichier php contenant notre shell.  
+
+Puis on va l'intercepter en utilsant Burp et modifier la ligne 
+```
+Content-type : application/octet-stream
+```
+
+et la remplacer par 
+```
+Content-type : image/jpeg
+```
+La requete doit ressembler a celle -ci :
+![images](/images/fileUpload/4.png)
+
+En fesant cela on passe la structure de controle du serveur et on va pouvoir acceder a notre webshell
+![images](/images/fileUpload/5.png)
+
+On peut regarder le code source php pour comprendre ce qu'il se passe 
+```php
+<?php
+
+if( isset( $_POST[ 'Upload' ] ) ) {
+    // Where are we going to be writing to?
+    $target_path  = DVWA_WEB_PAGE_TO_ROOT . "hackable/uploads/";
+    $target_path .= basename( $_FILES[ 'uploaded' ][ 'name' ] );
+
+    // File information
+    $uploaded_name = $_FILES[ 'uploaded' ][ 'name' ];
+    $uploaded_type = $_FILES[ 'uploaded' ][ 'type' ];
+    $uploaded_size = $_FILES[ 'uploaded' ][ 'size' ];
+
+    // Is it an image?
+    if( ( $uploaded_type == "image/jpeg" || $uploaded_type == "image/png" ) &&
+        ( $uploaded_size < 100000 ) ) {
+
+        // Can we move the file to the upload folder?
+        if( !move_uploaded_file( $_FILES[ 'uploaded' ][ 'tmp_name' ], $target_path ) ) {
+            // No
+            echo '<pre>Your image was not uploaded.</pre>';
+        }
+        else {
+            // Yes!
+            echo "<pre>{$target_path} succesfully uploaded!</pre>";
+        }
+    }
+    else {
+        // Invalid file
+        echo '<pre>Your image was not uploaded. We can only accept JPEG or PNG images.</pre>';
+    }
+}
+
+?
+```
+On voit que le code source controle le type de fichier mais c'est tout on peux donc changer le type de fichier mais garde l'extension `.php` pour passer au travers de la securite du site.
+
+# 6.3 Troisieme niveau - high
+
+Pour le troisieme niveau 
