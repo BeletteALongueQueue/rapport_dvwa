@@ -4,7 +4,7 @@ Une injection SQL (SQL Injection) est une faille de sécurité exploitée par un
 
 Imaginons un bloc de code vulnérable tout simple :  
 
-```
+```php
 $username = $_POST['username'];
 $password = $_POST['password'];
 
@@ -17,7 +17,7 @@ Le script ci-dessus va utiliser l'input de l'utilisateur et va le concaténer av
 Ainsi prenons un exemple d'attaque où l'attaquant entre comme nom d'utilisateur `admin' --`  
 La requête devient alors :
 
-```
+```sql
 SELECT * FROM users WHERE username = 'admin' -- ' AND password = '';
 ```
 
@@ -31,7 +31,7 @@ Cela nous renvoie l'utilisateur sans le mot de passe.
 
 On va commencer par essayer une simple injection 
 
-```
+```sql
 admin' OR '1'='1
 ```
 
@@ -97,7 +97,7 @@ Cette fois ci, sqlmap a réussi à déchiffrer tous les hash des mot de passe en
 
 ### php
 
-```
+```php
 <?php
 
 if( isset( $_REQUEST[ 'Submit' ] ) ) {
@@ -188,7 +188,7 @@ Bingo ! On obtient encore les identifiants
 
 ### php
 
-```
+```php
 <?php
 
 if( isset( $_POST[ 'Submit' ] ) ) {

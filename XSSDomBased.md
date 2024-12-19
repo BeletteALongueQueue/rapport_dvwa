@@ -49,7 +49,7 @@ On rajoute un `onclick` sur le bouton `select` qui permet d'afficher les cookies
 
 On peux regarder le code et on voit qu'il y a une condition qui verifie si il y a un parametre `<script>`, comme on le pensait.
 
-```
+```php
 <?php
 
 // Is there any input?

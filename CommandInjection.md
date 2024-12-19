@@ -22,7 +22,7 @@ Ici par exemple nous allons afficher le code source de la page, ce qui nous perm
 
 Puisque c'est du code php, il faut regarder avec `ctrl + u` pour voir le script php.
 
-```
+```php
 <?php
 
 if( isset( $_POST[ 'Submit' ]  ) ) {
@@ -66,7 +66,7 @@ Cela nos permet d'éxecuter cette commande et par la même occasion lire le code
 || cat ../exec/source/medium.php
 ```
 
-```
+```php
 <?php
 
 if( isset( $_POST[ 'Submit' ]  ) ) {
@@ -118,7 +118,7 @@ En fait la raison est probablement un oublie ou une faute de frappe puisqu'on vo
 
 Voici le code php du niveau impossible :  
 
-```
+```php
 <?php
 
 if( isset( $_POST[ 'Submit' ]  ) ) {
@@ -167,7 +167,7 @@ Tout d'abord l'input de l'utilisateur est récupéré via `$_REQUEST['ip']` puis
 
 Puis l'adresse IP est vérifiée a l'aide de ce bloc de code
 
-```
+```php
 $octet = explode( ".", $target );
 if( ( is_numeric( $octet[0] ) ) && ( is_numeric( $octet[1] ) ) && ( is_numeric( $octet[2] ) ) && ( is_numeric( $octet[3] ) ) && ( sizeof( $octet ) == 4 ) )
 ```

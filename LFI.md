@@ -39,7 +39,7 @@ http://34.163.97.167/DVWA/vulnerabilities/fi/?page=/etc/passwd
 On voit que la faille est bien présente puisqu’elle permet d’afficher n’importe quel fichier sur le serveur.  
 On peut donc en quelque sorte en déduire le code php qui est présent sur le serveur.    
 
-```
+```php
 <?php  
 $page = $_GET['page'];
 include($page); ?>
@@ -71,7 +71,7 @@ http://34.163.97.167/DVWA/vulnerabilities/fi/?page=/etc/passwd
 
 On peux donc en deduire ce que le serveur a comme code :  
 
-```
+```php
 <?php
 
 // The page we wish to display
@@ -100,7 +100,7 @@ Il doit donc y avoir encore plus de filtre ou une strucuture de controle qui a e
 
 Ici, n'ayant pas vraiment d'idee pour trouver la solution nous sommes alles directement voir le code php pour comprendre ce que le serveur filtrait ou non.  
 
-```
+```php
 <?php
 
 $file = $_GET['page'];
@@ -126,11 +126,11 @@ http://34.163.97.167/DVWA/vulnerabilities/fi/?page=file/../../../../../../../../
 
 Et encore une fois, nous arrivons a afficher le resultat de `/etc/passwd`.  
 
-![imaegs](/images/lfi/4.png)
+![imaegs](C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\fileUpload\5.png)
 
 ## 1.4 Niveau Impossible
 
-```
+```php
 <?php
 
 // The page we wish to display
