@@ -22,3 +22,31 @@ sqlmap -u "http://34.163.97.167/DVWA/vulnerabilities/sqli_blind/?id=1&Submit=Sub
 ![images](C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\sql\10.png)
 
 ## 1.2 Deuxieme niveau - medium
+
+En utilisant Burp suite, nous allons capturer la requete `POST` 
+
+![images](C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\sql\11.png)
+
+On utilise encore la meme commande que precedemment 
+
+```
+sqlmap -r post.txt -p id
+```
+
+On voit dans la requete que le parametre a injecter est `id` on precise donc `-p id` et on met notre requete dans le fichier `post.txt`.
+
+sqlmap identifie 2 types de vulnerabilites :
+
+`boolen-based blind`
+
+`time-based blind`
+
+![images](C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\sql\12.png)
+
+On reutilise donc les meme parametres apres avoir identifier le nom de la bases de donnes et les tables :
+
+```
+sqlmap -r post.txt -p id --dump -T users -D dvwa
+```
+
+## 1.3 Troisieme niveau - high

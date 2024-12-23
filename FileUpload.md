@@ -90,4 +90,10 @@ On voit que le code source controle le type de fichier mais c'est tout on peux d
 
 # 1.3 Troisieme niveau - high
 
-Pour le troisieme niveau 
+Pour le troisieme niveau, apres avoir effectuer quelque tests, on se rend compte que le champ `content-type` n'est pas verifie en revanche l'extension elle, semble verifie. On va donc utiliser la meme methode qui consiste a intercepter notre requete avec Burp Suite puis a modifier les informations. Ici on va donc modifier le `Content-type` et le remplacer par celui du php : `Content-type: application/x-php`.
+
+Requete initial : 
+
+![images](C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\fileUpload\6.png)
+
+Requete modifier :
