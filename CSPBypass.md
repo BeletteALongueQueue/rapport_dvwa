@@ -2,7 +2,7 @@
 
 Une **faille CSP** (Content Security Policy) désigne une faiblesse ou une mauvaise configuration de la **Politique de Sécurité du Contenu** (Content Security Policy) d'un site web. Cette politique, utilisée pour protéger contre des attaques comme le **Cross-Site Scripting (XSS)** ou l'injection de contenu malveillant, devient inefficace si elle est mal configurée ou contournée
 
-## 1.1 Niveau simple - low
+## 1.1 Premier niveau - low
 
 Voici ce que nous avons dans la categorie CSP
 
@@ -28,7 +28,9 @@ $page[ 'body' ] .= "
 }
 ```
 
-On voit que le script nous permet d'effectuer des requetes a des sites exterieures par exemple nous utiliserons ici :
+On voit que le script recupere le contenu du formulaire et le met entre des balises script. On voit que le script nous permet d'effectuer des requetes a certains sites exterieures avec `script-src 'self' https://code.jquery.com;` qui autorise uniquement les scripts locaux et certains site ''sûr''. 
+
+par exemple nous utiliserons ici :
 
 ```
 https://digi.ninja/dvwa/alert.js
@@ -47,3 +49,5 @@ Ainsi. si la page est vulnerable, le script s'executera sur notre site dvwa.
 On met simplement le lien et on clique sur include pour voir le resultat et on obtient bien l'alerte. Il y a donc bien une faille CSP
 
 ![images](C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\3.png)
+
+## 1.2 Niveau intermediaire - medium
