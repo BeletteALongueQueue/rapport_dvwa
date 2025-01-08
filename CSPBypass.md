@@ -1,14 +1,13 @@
 # 1. CSP Bypass
 
-Une **faille CSP** (Content Security Policy) désigne une faiblesse ou une mauvaise configuration de la **Politique de Sécurité du Contenu** (Content Security Policy) d'un site web. Cette politique, utilisée pour protéger contre des attaques comme le **Cross-Site Scripting (XSS)** ou l'injection de contenu malveillant, devient inefficace si elle est mal configurée ou contournée
+Une **faille CSP** (Content Security Policy) désigne une faiblesse ou une mauvaise configuration de la **Politique de Sécurité du Contenu** (Content Security Policy) d'un site web. Cette politique, utilisée pour protéger contre des attaques comme le **Cross-Site Scripting (XSS)** ou l'injection de contenu malveillant, devient inefficace si elle est mal configurée ou contournée.
 
-____
+---
 
 ## 1.1 Premier niveau - low
 
-Voici ce que nous avons dans la categorie CSP
-
-![images](C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\1.png)
+Voici ce que nous avons dans la catégorie CSP :  
+![images](file://C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\1.png?msec=1736349682104)
 
 ```php
 <?php
@@ -30,11 +29,11 @@ $page[ 'body' ] .= "
 }
 ```
 
-On voit que le script recupere le contenu du formulaire et le met entre des balises script. On voit que le script nous permet d'effectuer des requetes a certains sites exterieures avec `script-src 'self' https://code.jquery.com;` qui autorise uniquement les scripts locaux et certains site ''sûr''. 
+On voit que le script récupère le contenu du formulaire et le met entre des balises `<script>`. Il permet d'effectuer des requêtes vers certains sites externes avec `script-src 'self' https://code.jquery.com;` qui autorise uniquement les scripts locaux et certains sites "sûrs".
 
-par exemple nous utiliserons ici :
+Par exemple, nous utilisons :
 
-```
+```url
 https://digi.ninja/dvwa/alert.js
 ```
 
@@ -44,72 +43,65 @@ Cette page contient ce code :
 alert("CSP Bypassed");
 ```
 
-Ainsi. si la page est vulnerable, le script s'executera sur notre site dvwa.
+Ainsi, si la page est vulnérable, le script s'exécutera sur notre site DVWA.  
 
-![iamges](C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\2.png)
+![images](file://C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\2.png?msec=1736349682105)
 
-On met simplement le lien et on clique sur include pour voir le resultat et on obtient bien l'alerte. Il y a donc bien une faille CSP
+On soumet simplement le lien et on clique sur "Include" pour voir le résultat. Nous obtenons bien l'alerte :  
+![images](file://C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\3.png?msec=1736349682106)
 
-![images](C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\3.png)
+Il y a donc une faille CSP.
 
-## 1.2 Niveau intermediaire - medium
+---
 
-Analysons encore une fois le code source : 
+## 1.2 Niveau intermédiaire - medium
+
+Analysons encore une fois le code source :
 
 ```php
 $headerCSP = "Content-Security-Policy: script-src 'self' 'unsafe-inline' 'nonce-TmV2ZXIgZ29pbmcgdG8gZ2l2ZSB5b3UgdXA=';";
 ```
 
-En analysant le code source :
+Pour `script-src`, nous avons :
 
-On a pour `script-src`
+- `'self'` : permet l'exécution de ressources fournies par la même origine.
+- `'unsafe-inline'` : autorise les scripts inclus dans les balises `<script>`.
+- `'nonce-TmV2ZXIgZ29pbmcgdG8gZ2l2ZSB5b3UgdXA='` : exige qu'un script possède ce nonce pour être exécuté.
 
-- 'self'
+La faille réside dans le fait que le nonce est censé être dynamique (unique pour chaque requête). Or, ici, en effectuant plusieurs requêtes `GET`, nous remarquons que le nonce reste le même et devient donc inutile.
 
-- 'unsafe-inline'
+Nous forgeons une requête :
 
-- 'nonce-TmV2ZXIgZ29pbmcgdG8gZ2l2ZSB5b3UgdXA='
-  
-  
-
-Le `self` nous permet l'execution de ressources fournies par la meme origine.
-
-Le `unsafe-inline` autorise les scripts avec les balises `<script>`.
-
-Finalement, seul un script ayant cette valeur `'nonce-TmV2ZXIgZ29pbmcgdG8gZ2l2ZSB5b3UgdXA='` sera autorise a etre execute.
-
-
-
-La faille se trouve dans le fait que le `nonce` est cense etre dynamique cet a dire qu'il est supposement unique pour chaque requete. Or ici en faisant plusieurs test de requete `GET` on remarque rapidement que le nonce reste toujours le meme et est donc complement inutile.
-
-On va donc forger une requete de ce type :
-
-```js
+```html
 <script nonce="TmV2ZXIgZ29pbmcgdG8gZ2l2ZSB5b3UgdXA=">alert('test');</script>
 ```
 
-![images](C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\4.png)
+Résultats :  
+![images](file://C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\4.png?msec=1736349682107)  
+![images](file://C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\5.png?msec=1736349682107)
 
-![images](C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\5.png)
+---
 
-## 1.2 Troisieme niveau - high
+## 1.3 Troisième niveau - high
 
-Cette fois ci la page est differente, on a une page qui nous permet de faire un calcul en passant par une autre page
+Cette fois, la page nous propose de réaliser un calcul en passant par une autre page :  
+![images](file://C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\6.png?msec=1736349682108)
 
-![images](C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\6.png)
+Nous interceptons la requête à cette page et injectons notre propre code pour tester la vulnérabilité.
 
-on va donc essayer tout d'abord d'intercepter la requete a cette page et mettre notre propre code pour voir si la page est vulnerable 
+### Requête initiale :
 
-Requete initial :
+![images](file://C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\7.png?msec=1736349682109)
 
-![images](C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\7.png)
+### Requête modifiée :
 
-Requete modifie :
+![images](file://C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\8.png?msec=1736349682109)
 
-![images](C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\8.png)
+Nous obtenons bien le résultat souhaité : une boîte de dialogue (alert).  
+![images](file://C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\9.png?msec=1736349682110)
 
-On a bien le resulat voulu, c'est a dire une boite info
+---
 
-![images](C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\csp\9.png)
+## 1.4 Dernier niveau - impossible
 
-## 1.2 Dernier niveau - Impossible
+À compléter pour ce niveau.

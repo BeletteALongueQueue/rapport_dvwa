@@ -1,54 +1,56 @@
 # 1. File Upload
 
-# 1.1 Premier Niveau - low
+## 1.1 Premier Niveau - low
 
-Pour ce premier niveau, nous avons la possibilite d'uploader un fichier. On part du principe qu'il n'y a pas de controle sur les fichiers que l'on depose
+Pour ce premier niveau, nous avons la possibilité d'uploader un fichier. On part du principe qu'il n'y a pas de contrôle sur les fichiers que l'on dépose.
 
-On va donc deposer un webshell `php` afin d'executer des commandes sur le serveur.  
+Nous allons déposer un webshell en `PHP` afin d'exécuter des commandes sur le serveur.
 
-Nous utiliserons ce web shell disponible au lien suivant :
+Nous utiliserons ce webshell disponible au lien suivant :
 
-```
+```url
 https://gist.github.com/joswr1ght/22f40787de19d80d110b37fb79ac3985#file-easy-simple-php-webshell-php
 ```
 
-![images](C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\fileUpload\1.png)
-une fois que l'on a uploader le fichier on va l'url donne par le site
+![images](file://C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\fileUpload\1.png?msec=1736349715368)
 
-```
+Une fois que le fichier est uploadé, nous accédons à l'URL donnée par le site :
+
+```url
 http://34.163.97.167/DVWA/hackable/uploads/test.php
 ```
 
-Notre shell est bien present nous permettant de saisir des commandes 
-![images](C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\fileUpload\2.png)
+Le shell est bien présent et nous permet de saisir des commandes :  
+![images](file://C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\fileUpload\2.png?msec=1736349715388)
 
-# 1.2 Deuxieme niveau - medium
+---
 
-Pour le deuxieme challenge, en essayant d'uploader un fichier php sur le site on est bloque puisque le site n'accepte que des `JPEG` et `PNG`
+## 1.2 Deuxième niveau - medium
 
-![images](C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\fileUpload\3.png)
+Pour le deuxième challenge, en essayant d'uploader un fichier PHP sur le site, nous sommes bloqués car le site n'accepte que des fichiers `JPEG` et `PNG` :
 
-On va donc etre obliger d'utiliser Burp Suite, Tout d'abord nous allons uploader un fichier php contenant notre shell.  
+![images](file://C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\fileUpload\3.png?msec=1736349715372)
 
-Puis on va l'intercepter en utilsant Burp et modifier la ligne 
+Nous utilisons Burp Suite. Tout d'abord, nous uploadons un fichier PHP contenant notre shell, puis nous interceptons la requête et modifions la ligne :
 
-```
-Content-type : application/octet-stream
-```
-
-et la remplacer par 
-
-```
-Content-type : image/jpeg
+```http
+Content-Type: application/octet-stream
 ```
 
-La requete doit ressembler a celle -ci :
-![images](C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\fileUpload\4.png)
+En la remplaçant par :
 
-En fesant cela on passe la structure de controle du serveur et on va pouvoir acceder a notre webshell
-![images](C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\fileUpload\5.png)
+```http
+Content-Type: image/jpeg
+```
 
-On peut regarder le code source php pour comprendre ce qu'il se passe 
+La requête doit ressembler à ceci :
+
+![images](file://C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\fileUpload\4.png?msec=1736349715403)
+
+En procédant ainsi, nous contournons la vérification du serveur et accédons à notre webshell :  
+![images](file://C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\fileUpload\5.png?msec=1736349715390)
+
+Voici le code source PHP pour mieux comprendre :
 
 ```php
 <?php
@@ -74,7 +76,7 @@ if( isset( $_POST[ 'Upload' ] ) ) {
         }
         else {
             // Yes!
-            echo "<pre>{$target_path} succesfully uploaded!</pre>";
+            echo "<pre>{$target_path} successfully uploaded!</pre>";
         }
     }
     else {
@@ -83,17 +85,21 @@ if( isset( $_POST[ 'Upload' ] ) ) {
     }
 }
 
-?
+?>
 ```
 
-On voit que le code source controle le type de fichier mais c'est tout on peux donc changer le type de fichier mais garde l'extension `.php` pour passer au travers de la securite du site.
+Le code source contrôle le type de fichier, mais il est possible de modifier le `Content-Type` tout en gardant l'extension `.php` pour contourner cette sécurité.
 
-# 1.3 Troisieme niveau - high
+---
 
-Pour le troisieme niveau, apres avoir effectuer quelque tests, on se rend compte que le champ `content-type` n'est pas verifie en revanche l'extension elle, semble verifie. On va donc utiliser la meme methode qui consiste a intercepter notre requete avec Burp Suite puis a modifier les informations. Ici on va donc modifier le `Content-type` et le remplacer par celui du php : `Content-type: application/x-php`.
+## 1.3 Troisième niveau - high
 
-Requete initial : 
+Pour le troisième niveau, après quelques tests, nous constatons que le champ `Content-Type` n'est pas vérifié, mais que l'extension l'est. Nous utilisons la même méthode, en interceptant notre requête avec Burp Suite et en modifiant les informations. Cette fois, nous changeons le `Content-Type` pour celui du PHP : `Content-Type: application/x-php`.
 
-![images](C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\fileUpload\6.png)
+### Requête initiale :
 
-Requete modifier :
+![images](file://C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\fileUpload\6.png?msec=1736349715417)
+
+### Requête modifiée :
+
+(à compléter avec la capture d'écran ou les détails finaux).

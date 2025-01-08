@@ -7,20 +7,19 @@ Lorsqu'une application prend des données en entrée de l'utilisateur (par exemp
 ## 1.1 Premier niveau - low
 
 On arrive sur une page avec un service de ping  
+![images](file://C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\exec\1.png?msec=1736349725469)
 
-![images](C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\exec\1.png)  
+Puisque c'est du PHP, on va essayer une simple méthode qui consiste à utiliser le caractère `;` pour "sortir" du code PHP qui permet de ping, puis saisir la commande que l'on souhaite :
 
-Puisque c'est du php, on va essayer une simple methode qui consite à utiliser le caractètre `;` pour "sortir" du code php qui permet de ping, puis nous allons saisir la commande que l'on veux 
-
-```
+```bash
 ; cat ../exec/source/low.php
 ```
 
-Ici par exemple nous allons afficher le code source de la page, ce qui nous permettra de visualiser en même temps comment fonctionne le serveur.  
+Ici, par exemple, nous affichons le code source de la page, ce qui nous permettra de visualiser en même temps comment fonctionne le serveur.
 
-![images](C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\exec\2.png)  
+![images](file://C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\exec\2.png?msec=1736349725471)
 
-Puisque c'est du code php, il faut regarder avec `ctrl + u` pour voir le script php.
+Puisque c'est du code PHP, il faut regarder avec `Ctrl + U` pour voir le script :
 
 ```php
 <?php
@@ -40,16 +39,21 @@ if( isset( $_POST[ 'Submit' ]  ) ) {
     }
 
     // Feedback for the end user
-    $html .= "<pre>{$cmd}
+    $html .= "<pre>{$cmd}</pre>";
+}
 ```
 
-On tombe sur ceci et on remarque que il n'y a aucun contrôle sur l'input de l'utilisateur. De plus on comprend mieux comment les commandes systemes sont executés. C'est a l'aide de la fonction `shell_exec()` de php.
+On remarque qu'il n'y a aucun contrôle sur l'input de l'utilisateur. De plus, on comprend mieux comment les commandes système sont exécutées : grâce à la fonction `shell_exec()` de PHP.
 
-## 1.2 Deuxieme niveau - medium
+---
 
-Pour ce deuxieme niveau, en essayant avec `;` l'injection ne fonctionne pas. Nous avons donc cherché differents caractères propres à Linux qui aurait peut être échappé au filtre que le dévellopeur à mis en place car on se doute ici que certains caractères ont été blacklisté.  
+## 1.2 Deuxième niveau - medium
 
-Après une simple recherche sur Internet, on tombe sur un github `https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Command%20Injection/README.md` qui nous fournit quelques indications.
+Pour ce deuxième niveau, en essayant avec `;`, l'injection ne fonctionne pas. Nous avons donc cherché différents caractères propres à Linux qui auraient pu échapper au filtre que le développeur a mis en place, car on se doute que certains caractères ont été blacklistés.
+
+Après une recherche rapide sur Internet, on tombe sur un GitHub :  
+`https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Command%20Injection/README.md`  
+Ce dernier nous fournit quelques indications :
 
 ```
 ; (Semicolon): Allows you to execute multiple commands sequentially.
@@ -59,10 +63,10 @@ Après une simple recherche sur Internet, on tombe sur un github `https://github
 | (Pipe): Takes the output of the first command and uses it as the input for the second command.
 ```
 
-En essayant ces caractères, on en trouve un qui n'est pas blacklisté `||`.  
-Cela nos permet d'éxecuter cette commande et par la même occasion lire le code php.
+En essayant ces caractères, on en trouve un qui n'est pas blacklisté : `||`.  
+Cela nous permet d'exécuter cette commande et de lire le code PHP :
 
-```
+```bash
 || cat ../exec/source/medium.php
 ```
 
@@ -93,30 +97,35 @@ if( isset( $_POST[ 'Submit' ]  ) ) {
     }
 
     // Feedback for the end user
-    $html .= 
+    $html .= "<pre>{$cmd}</pre>";
+}
 ```
 
-Notre théorie initial était correcte. On à effectivement une blacklist qui inclue le `;` et `&&` mais pas le `||`.
+Notre théorie initiale était correcte. On remarque effectivement une blacklist qui inclut `;` et `&&`, mais pas `||`.
+
+---
 
 ## 1.3 Troisième niveau - hard
 
-Pour ce troisieme challenge, on part du principe que l'administrateur a blacklist tous les caractères que l'on a cité avant. On doit donc trouver une autre manière.
+Pour ce troisième challenge, on part du principe que l'administrateur a blacklisté tous les caractères mentionnés précédemment. Nous devons donc trouver une autre méthode.
 
-Cependant, en essayant plusieurs commande dans l'éventualité ou notre théorie était fausse on tombe sur cette commande qui elle fonctionne
+En essayant plusieurs commandes, on trouve cette commande qui fonctionne :
 
-```
+```bash
 |cat ../exec/source/high.php
 ```
 
-Le script est bien exécuté 
-![images](C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\exec\3.png)  
+Le script est bien exécuté :  
+![images](file://C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\exec\3.png?msec=1736349725470)
 
-On peux maintenant essayer de comprendre pourquoi :).  
-En fait la raison est probablement un oublie ou une faute de frappe puisqu'on voit que le symbole `|` n'est pas blacklisté, c'est le symbole `| ` qui l'est. Cela nous permet donc d'éxecuter notre code.  
+On peut maintenant essayer de comprendre pourquoi.  
+La raison est probablement un oubli ou une faute de frappe, puisqu'on voit que le symbole `|` n'est pas blacklisté, mais le symbole `| ` (avec un espace) l'est. Cela nous permet donc d'exécuter notre code.
+
+---
 
 ## 1.4 Niveau impossible
 
-Voici le code php du niveau impossible :  
+Voici le code PHP du niveau impossible :
 
 ```php
 <?php
@@ -129,7 +138,7 @@ if( isset( $_POST[ 'Submit' ]  ) ) {
         $target = $_REQUEST[ 'ip' ];
         $target = stripslashes( $target );
 
-        // Split the IP into 4 octects
+        // Split the IP into 4 octets
         $octet = explode( ".", $target );
 
         // Check IF each octet is an integer
@@ -162,14 +171,15 @@ generateSessionToken();
 ?>
 ```
 
-Essayons de comprendre:  
-Tout d'abord l'input de l'utilisateur est récupéré via `$_REQUEST['ip']` puis la fonction `stripslashes()` lui est appliqué permettant de retirer dans un premier temps les caractères spéciaux  
+### Analyse
 
-Puis l'adresse IP est vérifiée a l'aide de ce bloc de code
+L'input de l'utilisateur est récupéré via `$_REQUEST['ip']`, puis la fonction `stripslashes()` est appliquée pour retirer les caractères spéciaux.
+
+Ensuite, l'adresse IP est vérifiée à l'aide du bloc suivant :
 
 ```php
 $octet = explode( ".", $target );
 if( ( is_numeric( $octet[0] ) ) && ( is_numeric( $octet[1] ) ) && ( is_numeric( $octet[2] ) ) && ( is_numeric( $octet[3] ) ) && ( sizeof( $octet ) == 4 ) )
 ```
 
-Ce dernier va diviser l'IP en 4 parties grâce au séparateur `.` puis chaque octet est validé avec la fonction `is_numeric()` permettant de vérifier si il s'agit bien de chiffres. Finalement le script vérifie aussi la taille avec `size($octet) == 4` pour confirmer que l'adresse comporte exactement 4 partie.
+Ce code divise l'IP en 4 parties grâce au séparateur `.`. Chaque octet est validé avec `is_numeric()` pour vérifier qu'il s'agit bien de chiffres. Enfin, la taille est contrôlée avec `sizeof($octet) == 4

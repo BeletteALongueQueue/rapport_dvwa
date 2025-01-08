@@ -1,43 +1,49 @@
 # Pentest en utilisant DVWA
 
-> author : Sacha Besser  
+> author : Sacha Besser
 
 # 1. Local File Inclusion
 
-Une Local File Inclusion (LFI) est une vulnérabilité web qui permet à un attaquant de forcer un site à inclure et afficher des fichiers locaux présents sur le serveur.  
+Une Local File Inclusion (LFI) est une vulnérabilité web qui permet à un attaquant de forcer un site à inclure et afficher des fichiers locaux présents sur le serveur.
 
-Cette faille se produit lorsque le site web inclut un fichier sans bien vérifier ou filtrer ce que l’utilisateur peut choisir.  
+Cette faille se produit lorsque le site web inclut un fichier sans bien vérifier ou filtrer ce que l’utilisateur peut choisir.
 
 Par exemple, un site utilise une URL comme :
 
-```
+```url
 http://34.163.97.167/DVWA/vulnerabilities/fi/?page=file.php
 ```
 
-Ici, le fichier file.php est inclus par la variable page.  
+Ici, le fichier file.php est inclus par la variable page.
 
 Si l’entrée utilisateur n'est pas sécurisée, un attaquant pourrait manipuler l'URL pour inclure d'autres fichiers locaux :
 
-```
+```url
 http://34.163.97.167/DVWA/vulnerabilities/fi/?page=/etc/passwd
 ```
+
+---
 
 ## 1.1 Premier niveau – low
 
-Nous avons une page toute simple avec trois fichiers` http://34.163.97.167/DVWA/vulnerabilities/fi/?page=include.php `  
+Nous avons une page toute simple avec trois fichiers :
 
-![image](images/lfi/1.png)  
-
-Nous allons donc simplement essayer de modifier le parametre pour inclure une autre page par exemple `/etc/passwd`  
-
+```url
+http://34.163.97.167/DVWA/vulnerabilities/fi/?page=include.php
 ```
+
+![image](file://C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\lfi\1.png?msec=1736349718568)
+
+Nous allons simplement essayer de modifier le paramètre pour inclure une autre page, par exemple `/etc/passwd` :
+
+```url
 http://34.163.97.167/DVWA/vulnerabilities/fi/?page=/etc/passwd
 ```
 
-![image](images/lfi/2.png)  
+![image](file://C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\lfi\2.png?msec=1736349718573)
 
 On voit que la faille est bien présente puisqu’elle permet d’afficher n’importe quel fichier sur le serveur.  
-On peut donc en quelque sorte en déduire le code php qui est présent sur le serveur.    
+On peut donc en quelque sorte en déduire le code PHP présent sur le serveur :
 
 ```php
 <?php  
@@ -45,31 +51,36 @@ $page = $_GET['page'];
 include($page); ?>
 ```
 
-Cela serait probablement quelque chose comme affiche ci-dessus. C’est-à-dire un simple paramètre `GET` sans aucune structure de contrôle.
+Cela pourrait être quelque chose de simple comme ce code ci-dessus, avec un paramètre `GET` sans structure de contrôle.
 
-## 1.2 Deuxieme niveau - medium
+---
 
-Pour cette deuxieme partie, nous effectuons quelque test et nous pouvons remarquer que `../` est filtre.  
-Par Exemple :  
+## 1.2 Deuxième niveau - medium
 
-```
+Pour cette deuxième partie, après quelques tests, nous remarquons que `../` est filtré.  
+Par exemple :
+
+```url
 http://34.163.97.167/DVWA/vulnerabilities/fi/?page=../etc/passwd
 ```
 
-Le resultat ci dessous montre que les `..` ont ete filtre, ainsi le serveur n'a pas affiche le fichier que l'on voulait.
-![image](images/lfi/3.png)  
+Le résultat ci-dessous montre que les `..` ont été filtrés, et le serveur n'affiche pas le fichier demandé :
 
-C'est donc assez facile ici de contourner le filtre, il suffit juste de ne pas utiliser `..`, par exemple nous pouvons acceder a la racine simplement en utilisant `/`.
+![image](file://C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\lfi\3.png?msec=1736349718574)
 
-Ainsi en utilisant la meme commande, on arrive a la solution :  
+Ici, il est facile de contourner le filtre en n'utilisant pas `..`. Par exemple, nous pouvons accéder à la racine en utilisant `/` directement.
 
-```
+Ainsi, en utilisant la commande suivante :
+
+```url
 http://34.163.97.167/DVWA/vulnerabilities/fi/?page=/etc/passwd
 ```
 
-![image](images/lfi/2.png)
+Nous obtenons le même résultat :
 
-On peux donc en deduire ce que le serveur a comme code :  
+![image](file://C:\Users\sacha\Desktop\pentest_dvwa\rapport_dvwa\images\lfi\2.png?msec=1736349718573)
+
+Le code du serveur pourrait être le suivant :
 
 ```php
 <?php
@@ -84,21 +95,22 @@ $file = str_replace( array( "../", "..\\" ), "", $file );
 ?>
 ```
 
-Pour se faire nous allons voir la configuration de `dvwa` et on remarque que notre hypthese etait bonne, les `../` sont bien filtre mais aussi les `http://` et `https://` qui sont retires et remplaces par une chaine vide.
+En analysant la configuration de DVWA, on remarque que les `../` sont bien filtrés ainsi que les `http://` et `https://`.
 
-## 1.3 Troisieme niveau - high
+---
 
-Pour la troisieme partie on va reessayer d'executer la meme commande pour voir comment le serveur reagis
+## 1.3 Troisième niveau - high
 
-```
+Pour cette troisième partie, nous réessayons d'exécuter la commande suivante :
+
+```url
 http://34.163.97.167/DVWA/vulnerabilities/fi/?page=/etc/passwd
 ```
 
-Cette fois ci le serveur ne nous affiche pas le fichier voulus, mais la phrase `ERROR: File not found!`
+Cette fois-ci, le serveur affiche : `ERROR: File not found!`.  
+Il y a donc davantage de filtres ou une structure de contrôle supplémentaire.
 
-Il doit donc y avoir encore plus de filtre ou une strucuture de controle qui a ete ajoute
-
-Ici, n'ayant pas vraiment d'idee pour trouver la solution nous sommes alles directement voir le code php pour comprendre ce que le serveur filtrait ou non.  
+En regardant le code PHP, nous découvrons :
 
 ```php
 <?php
@@ -114,19 +126,19 @@ if( !fmatch( "file", $file ) && $file != "include.php" ) {
 ?>
 ```
 
-On peux voir que le serveur verifie si le fichier que l'on recupere commence par `"file"`, ceci est en principe une bonne idee puisque les fichiers etant nomme `file1.php`, `file2.php` ..., le script est cense filtre tous les autres. 
+Le serveur vérifie si le fichier commence par `file`. Cette approche est censée limiter l'accès à des fichiers non autorisés.
 
-Or en ayant compris cela, on en deduis que si on commence chaque "injection" par `file`, on contournera le filtre.  
+Pour contourner cette restriction, nous incluons le préfixe `file` dans l'injection :
 
-Par exemple essayons ceci :  
-
-```
+```url
 http://34.163.97.167/DVWA/vulnerabilities/fi/?page=file/../../../../../../../../../etc/passwd
 ```
 
-Et encore une fois, nous arrivons a afficher le resultat de `/etc/passwd`.  
+Nous arrivons ainsi à afficher le contenu de `/etc/passwd` :
 
-![imaegs](C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\fileUpload\5.png)
+![images](file://C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\fileUpload\5.png?msec=1736349715390)
+
+---
 
 ## 1.4 Niveau Impossible
 
@@ -153,5 +165,9 @@ if( !in_array($file, $configFileNames) ) {
 ?>
 ```
 
-Analysons rapidement ce code.  
-Le fichier est recupere dans la variable `file` puis on voit qu'il est compare a une liste contenant tous les fichiers. C'est clairement la meilleure methode puisque ici, soit le nom du fichier est egale a celui qui est dans la liste et le fichier est affiche ou il ne l'est pas et alors le message `ERROR : File not found` est affiche.
+Analysons ce code :
+
+1. Le fichier est récupéré dans la variable `$file`.
+2. Il est comparé à une liste contenant les noms de fichiers autorisés.
+
+Cette méthode est efficace, car elle vérifie explicitement si le fichier demandé est dans la liste. Si ce n'est pas le cas, le serveur affiche : `ERROR: File not found!`.

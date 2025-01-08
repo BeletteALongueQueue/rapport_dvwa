@@ -2,52 +2,61 @@
 
 Le DOM-Based XSS (Cross-Site Scripting) est une variante de vulnérabilité XSS où l'injection malveillante se produit dans le Document Object Model (DOM) côté client, sans jamais transiter par le serveur. Autrement dit, le code malveillant est interprété directement par le navigateur en manipulant des données dynamiques gérées dans le DOM, souvent à partir de l'URL ou d'autres entrées utilisateur.
 
+---
+
 ## 1.1 Premier niveau - low
 
-Nous arrivons sur une page ou l'on peux changer la langue.  
+Nous arrivons sur une page où l'on peut changer la langue.
 
-![images](C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\xssDom\1.png)
+![images](file://C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\xssDom\1.png?msec=1736350428910)
 
-On remarque un parametre `GET` dans l'url qui est `default`.
+On remarque un paramètre `GET` dans l'URL qui est `default` :
 
-```
+```url
 http://34.163.97.167/DVWA/vulnerabilities/xss_d/?default=French
 ```
 
-On va donc essayer de modifier la valeur `French` par une injection SQL basique pour voir si ca marche
+Nous modifions la valeur `French` par une injection JavaScript simple pour tester :
 
-```
+```url
 http://34.163.97.167/DVWA/vulnerabilities/xss_d/?default=%3Cscript%3Ealert(%27info%27);%3C/script%3E
 ```
 
-![images](C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\xssDom\2.png)
+![images](file://C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\xssDom\2.png?msec=1736350428912)
 
-On remarque que la page est vulnerable aux attaques XSS
+La page est vulnérable aux attaques XSS.
 
-On va donc essayer de recuperer les cookies de session en utilisant la fonction JS `document.cookie`
+### Exploitation : récupération de cookies
 
-![images](C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\xssDom\3.png)
+Nous essayons ensuite d'exploiter la faille pour récupérer les cookies de session via `document.cookie` :
 
-On arrive bien a recuperer les cookies de session en utilisant la faille.
-On peux donc en deduire qu'il n'y a aucun filtre/protection .
+![images](file://C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\xssDom\3.png?msec=1736350428911)
 
-## 1.2 Deuxieme niveau - medium
+Les cookies de session sont bien récupérés. On constate qu'aucun filtre ou protection n'est mis en place.
 
-Pour le deuxieme niveau, notre hypothese est que les balises les plus simples comme `<script>` sont filtres. Il faut donc trouver un autre moyen pour trouver le cookie
+---
 
-Apres avoir essaye d'injecter differents payload dans l'url, on se rend compte que cela ne marche pas. On va donc essayer de modifier via le mode developpeur de chrome le script manuellement.
+## 1.2 Deuxième niveau - medium
 
-![images](C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\xssDom\4.png)
+Pour ce niveau, les balises simples comme `<script>` semblent filtrées. Nous devons trouver une autre méthode.
 
-On rajoute un `onclick` sur le bouton `select` qui permet d'afficher les cookies
+### Analyse et modification
 
-```
+Après plusieurs essais infructueux dans l'URL, nous passons en mode développeur pour modifier le script directement dans le navigateur.
+
+![images](file://C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\xssDom\4.png?msec=1736350428914)
+
+Nous ajoutons un attribut `onclick` au bouton `Select` pour afficher les cookies :
+
+```html
 <input type="submit" value="Select" onclick="alert(document.cookie)">
 ```
 
-![images](C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\xssDom\5.png)
+![images](file://C:\Users\Sacha\Desktop\pentest_dvwa\rapport_dvwa\images\xssDom\5.png?msec=1736350428913)
 
-On peux regarder le code et on voit qu'il y a une condition qui verifie si il y a un parametre `<script>`, comme on le pensait.
+### Vérification dans le code
+
+Le code PHP montre une vérification basique :
 
 ```php
 <?php
@@ -66,9 +75,15 @@ if ( array_key_exists( "default", $_GET ) && !is_null ($_GET[ 'default' ]) ) {
 ?>
 ```
 
-## 1.3 Troisieme niveau - hard
+Le script bloque les balises `<script>`, mais d'autres méthodes d'injection restent possibles.
 
-Pour celui ci, ne trouvant pas nous avons commence par regarde le code source ci-dessous :
+---
+
+## 1.3 Troisième niveau - hard
+
+### Analyse du code source
+
+Le code suivant montre une amélioration avec une liste blanche :
 
 ```php
 <?php
@@ -93,12 +108,16 @@ if ( array_key_exists( "default", $_GET ) && !is_null ($_GET[ 'default' ]) ) {
 ?>
 ```
 
-L'administrateur a rajoute une White list qui permet "thoeriquement" de verifier que le parametre `default` contient bien une de langues dans le `switch case`. Le probleme c'est que l'on peux ecrire la langue pour passer la verification et ensuite injecter notre XSS
+L'administrateur a ajouté une liste blanche pour vérifier si le paramètre `default` correspond bien à une langue autorisée. Cependant, il reste possible d'injecter après le paramètre validé grâce au caractère `&`.
 
-On va donc injecter notre XSS apres le parametre `default` avec le caractere `&`
+### Exploitation
 
-```
+Nous injectons le XSS après le paramètre `default` :
+
+```url
 http://34.163.97.167/DVWA/vulnerabilities/xss_d/?default=German&<script>alert(document.cookie);</script>
 ```
 
-Et le payload est fonctionnele on retrouve bien notre cookie de session.
+Le payload est fonctionnel, et nous récupérons les cookies de session.
+
+---
